@@ -1,0 +1,10 @@
+[build]
+  command = ""
+  publish = "."
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Replace with the new site ID after running `netlify sites:create`
+# or update site name for a friendly URL
+# site = "your-new-site-id"
