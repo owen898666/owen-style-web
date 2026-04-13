@@ -1,0 +1,40 @@
+﻿backend:
+  name: github
+  repo: owen898666/owen-style-web
+  branch: main
+
+media_folder: images/uploads
+public_folder: /images/uploads
+
+collections:
+  - name: albums
+    label: 婚禮作品
+    folder: weddings
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - {label: 作品名稱, name: title, widget: string}
+      - {label: 描述, name: description, widget: text, required: false}
+      - {label: 封面圖, name: cover, widget: image, required: false}
+      - {label: 相簿, name: album_folder, widget: string, hint: '資料夾名稱'}
+  - name: wedding_service
+    label: 婚禮紀錄服務頁
+    file: service-wedding.html
+    fields:
+      - {label: 服務標題, name: h1, widget: string}
+      - {label: 服務內容, name: content, widget: markdown}
+      - {label: 價格, name: price, widget: string}
+  - name: contact
+    label: 聯絡資訊
+    file: contact.html
+    fields:
+      - {label: Email, name: email, widget: string}
+      - {label: LINE, name: line, widget: string}
+      - {label: Instagram, name: instagram, widget: string}
+      - {label: 電話, name: phone, widget: string}
+  - name: about
+    label: 關於 Owen
+    file: about.html
+    fields:
+      - {label: 個人照, name: photo, widget: image}
+      - {label: 自我介绍, name: bio, widget: markdown}
