@@ -1,0 +1,8 @@
+﻿python : C:\Users\user\AppData\Local\Programs\Python\Python314-32\python.exe: can't open file 'C:\\Users\\user\\.qclaw\
+\workspace\\owen-style-v2\\github_setup.py': [Errno 2] No such file or directory
+位於 線路:1 字元:138
++ ... \workspace\owen-style-v2; python -X utf8 github_setup.py 2>&1 | Out-F ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\user\A...le or directory:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
