@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Owen Style 婚禮紀錄作品 — 完整婚禮當天拍攝，以報導式手法記錄真實情感。">
+  <title>婚禮紀錄 — Owen Style 婚禮婚紗攝影</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="nav scrolled">
+    <a href="index.html" class="nav-logo">OWEN <span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="about.html">關於</a></li>
+      <li><a href="services.html">服務項目</a></li>
+      <li><a href="portfolio.html" class="active">作品集</a></li>
+      <li><a href="process.html">拍攝流程</a></li>
+      <li><a href="contact.html" class="nav-cta">預約諮詢</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <div class="page-header">
+    <img class="page-header-bg" src="https://owen-style.netlify.app/owen-574.jpg" alt="婚禮紀錄">
+    <div class="page-header-overlay"></div>
+    <div class="page-header-content">
+      <p class="breadcrumb">
+        <a href="index.html">首頁</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="portfolio.html">作品集</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>婚禮紀錄</span>
+      </p>
+      <h1>婚禮紀錄</h1>
+      <p>Wedding Photography · 155 組作品</p>
+    </div>
+  </div>
+
+  <div class="masonry-wrap">
+    <div class="container">
+      <div class="masonry" id="gallery">
+        <!-- Photos will be injected by JS from manifest -->
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <p class="section-label reveal">Like What You See?</p>
+      <h2 class="reveal">想要 Owen 為你記錄婚禮？</h2>
+      <p class="reveal">檔期有限，歡迎提前預約</p>
+      <div class="reveal">
+        <a href="contact.html" class="btn btn-primary">預約婚禮攝影</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">OWEN <span style="color:var(--accent);">.</span></a>
+        <p>婚禮婚紗攝影 | 孕寫真 | 家庭寫真</p>
+      </div>
+      <div>
+        <h4>快速連結</h4>
+        <ul class="footer-links">
+          <li><a href="about.html">關於 Owen</a></li>
+          <li><a href="services.html">服務項目</a></li>
+          <li><a href="portfolio.html">作品集</a></li>
+          <li><a href="contact.html">預約諮詢</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>服務項目</h4>
+        <ul class="footer-links">
+          <li><a href="service-wedding.html">婚禮紀錄</a></li>
+          <li><a href="service-registration.html">結婚登記</a></li>
+          <li><a href="service-maternity.html">孕寫真</a></li>
+          <li><a href="service-family.html">家庭寫真</li>
+          <li><a href="service-baby.html">抓週紀錄</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Owen Style Photography</span>
+      <span>Made with light &amp; love</span>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-backdrop" id="lb-backdrop"></div>
+    <img class="lightbox-img-wrap" id="lb-img" src="" alt="">
+    <button class="lightbox-close" id="lb-close" aria-label="關閉">×</button>
+    <button class="lightbox-nav lightbox-prev" id="lb-prev" aria-label="上一張">‹</button>
+    <button class="lightbox-nav lightbox-next" id="lb-next" aria-label="下一張">›</button>
+    <span class="lightbox-counter" id="lb-counter"></span>
+  </div>
+
+  <script>
+    // Load photos from Netlify CDN manifest (same domain, so works)
+    fetch('https://owen-style.netlify.app/portfolio/manifest.json')
+      .then(r => r.json())
+      .then(photos => {
+        const gallery = document.getElementById('gallery');
+        photos.forEach((p, i) => {
+          const div = document.createElement('div');
+          div.className = 'masonry-item ' + (p.orientation === 'portrait' ? 'portrait' : 'landscape');
+          const img = document.createElement('img');
+          img.src = '/portfolio/' + p.file;
+          img.alt = p.alt || '婚禮作品';
+          img.loading = 'lazy';
+          div.appendChild(img);
+          gallery.appendChild(div);
+        });
+        // Re-init lightbox after DOM update
+        initLightbox();
+      })
+      .catch(() => {
+        document.getElementById('gallery').innerHTML =
+          '<p style="text-align:center;color:var(--text-light);padding:60px 0;">作品載入中，請稍候...</p>';
+      });
+
+    function initLightbox() {
+      const lightbox = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lb-img');
+      const lbCounter = document.getElementById('lb-counter');
+      const lbClose = document.getElementById('lb-close');
+      const lbPrev = document.getElementById('lb-prev');
+      const lbNext = document.getElementById('lb-next');
+      const lbBackdrop = document.getElementById('lb-backdrop');
+      const items = Array.from(document.querySelectorAll('.masonry-item img'));
+      let current = 0;
+
+      function openLB(index) {
+        current = Math.max(0, Math.min(index, items.length - 1));
+        lbImg.src = items[current].src;
+        lbImg.alt = items[current].alt;
+        lbCounter.textContent = (current + 1) + ' / ' + items.length;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeLB() {
+        lightbox.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      items.forEach((img, i) => {
+        img.parentElement.style.cursor = 'zoom-in';
+        img.parentElement.addEventListener('click', () => openLB(i));
+      });
+      lbClose.addEventListener('click', closeLB);
+      lbBackdrop.addEventListener('click', closeLB);
+      lbPrev.addEventListener('click', () => openLB(current - 1));
+      lbNext.addEventListener('click', () => openLB(current + 1));
+      document.addEventListener('keydown', e => {
+        if (!lightbox.classList.contains('open')) return;
+        if (e.key === 'Escape') closeLB();
+        if (e.key === 'ArrowLeft') openLB(current - 1);
+        if (e.key === 'ArrowRight') openLB(current + 1);
+      });
+    }
+  </script>
+  <script src="js/main.js"></script>
+</body>
+</html>
