@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Owen Style 婚禮紀錄作品 — 80+ 場真實婚禮，每一場都是獨一無二的故事。">
+  <title>婚禮紀錄作品 — Owen Style 婚禮婚紗攝影</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .albums-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+    .album-card-simple { background: var(--bg); border-radius: 4px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; text-decoration: none; color: inherit; display: block; }
+    .album-card-simple:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
+    .album-card-simple img { width: 100%; aspect-ratio: 4/3; object-fit: cover; transition: transform 0.5s ease; }
+    .album-card-simple:hover img { transform: scale(1.03); }
+    .album-card-simple .info { padding: 20px; }
+    .album-card-simple h3 { font-family: var(--font-serif); font-size: 1.1rem; margin-bottom: 4px; }
+    .album-card-simple .meta { font-size: 0.82rem; color: var(--text-light); }
+  </style>
+</head>
+<body>
+
+  <nav class="nav scrolled">
+    <a href="/index.html" class="nav-logo">OWEN <span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="/about.html">關於</a></li>
+      <li><a href="/services.html">服務項目</a></li>
+      <li><a href="/portfolio.html" class="active">作品集</a></li>
+      <li><a href="/process.html">拍攝流程</a></li>
+      <li><a href="/contact.html" class="nav-cta">預約諮詢</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <div class="page-header">
+    <img class="page-header-bg" src="/images/weddings/default-cover.jpg" alt="婚禮紀錄">
+    <div class="page-header-overlay"></div>
+    <div class="page-header-content">
+      <p class="breadcrumb">
+        <a href="/index.html">首頁</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="/portfolio.html">作品集</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>婚禮紀錄</span>
+      </p>
+      <h1>婚禮紀錄</h1>
+      <p>Wedding Photography · <span id="album-count">80+</span> 場真實婚禮</p>
+    </div>
+  </div>
+
+  <section class="section-py">
+    <div class="container">
+      <div class="section-header center">
+        <p class="section-label reveal">Weddings</p>
+        <h2 class="reveal">每一場婚禮，都是獨一無二的故事</h2>
+        <p class="reveal">點擊任意相簿，瀏覽完整作品</p>
+      </div>
+
+      <div class="albums-grid" id="albums-container">
+        <!-- Albums loaded by JS -->
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <p class="section-label reveal">Like What You See?</p>
+      <h2 class="reveal">想要 Owen 為你記錄婚禮？</h2>
+      <p class="reveal">檔期有限，歡迎提前預約</p>
+      <div class="reveal"><a href="/contact.html" class="btn btn-primary">預約婚禮攝影</a></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="/index.html" class="nav-logo">OWEN <span style="color:var(--accent);">.</span></a>
+        <p>婚禮婚紗攝影 | 孕寫真 | 家庭寫真</p>
+      </div>
+      <div><h4>快速連結</h4><ul class="footer-links">
+        <li><a href="/about.html">關於 Owen</a></li><li><a href="/services.html">服務項目</a></li>
+        <li><a href="/portfolio.html">作品集</a></li><li><a href="/contact.html">預約諮詢</a></li>
+      </ul></div>
+      <div><h4>服務項目</h4><ul class="footer-links">
+        <li><a href="/service-wedding.html">婚禮紀錄</a></li>
+        <li><a href="/service-registration.html">結婚登記</a></li>
+        <li><a href="/service-maternity.html">孕寫真</a></li>
+        <li><a href="/service-family.html">家庭寫真</a></li>
+        <li><a href="/service-baby.html">抓週紀錄</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Owen Style Photography</span><span>Made with light &amp; love</span></div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script>
+    fetch('/images/weddings/albums.json')
+      .then(r => r.json())
+      .then(albums => {
+        document.getElementById('album-count').textContent = albums.length + ' 場';
+        const container = document.getElementById('albums-container');
+        albums.forEach((album, i) => {
+          const card = document.createElement('a');
+          card.href = `/weddings/${album.slug}.html`;
+          card.className = 'album-card-simple reveal';
+          card.innerHTML =
+            `<img src="/images/weddings/${album.cover}" alt="${album.name}" loading="lazy" onerror="this.src='/images/placeholder.jpg'">` +
+            `<div class="info"><h3>${album.name}</h3><p class="meta">${album.count} 張作品</p></div>`;
+          container.appendChild(card);
+        });
+      })
+      .catch(() => {
+        document.getElementById('albums-container').innerHTML =
+          '<p style="grid-column:1/-1;text-align:center;color:var(--text-light);padding:60px 0;">相簿載入中，請稍候...</p>';
+      });
+  </script>
+</body>
+</html>
