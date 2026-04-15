@@ -102,16 +102,16 @@
 
   <script>
     // Load photos from Netlify CDN manifest (same domain, so works)
-    fetch('albums.json')
+    fetch('https://owen-style.netlify.app/portfolio/manifest.json')
       .then(r => r.json())
       .then(photos => {
         const gallery = document.getElementById('gallery');
         photos.forEach((p, i) => {
           const div = document.createElement('div');
-          div.className = 'masonry-item ' + (p.orientation === 'portrait' ? 'portrait' : 'landscape');
+          div.className = 'masonry-item ' + ((p.orientation === 'portrait') ? 'portrait' : 'landscape');
           const img = document.createElement('img');
-          img.src = '/portfolio/' + p.file;
-          img.alt = p.alt || '婚禮作品';
+          img.src = '/images/weddings/' + p.slug + '.jpg';
+          img.alt = p.title || '婚禮作品';
           img.loading = 'lazy';
           div.appendChild(img);
           gallery.appendChild(div);
