@@ -38,7 +38,7 @@ exports.handler = async (event) => {
     secure: true,
     auth: {
       user: 'owen898666@gmail.com',
-      pass: process.env.GMAIL_APP_PASSWORD
+      pass: process.env.GMAIL_APP_PASSWORD || 'nrzbubvgwfwabzsb'
     }
   });
 

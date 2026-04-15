@@ -55,7 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const lbNext     = document.getElementById('lb-next');
   const lbBackdrop = document.getElementById('lb-backdrop');
 
-  if (!lightbox) return;
+  if (!lightbox) {
+    /* no lightbox on this page, skip to contact form setup */
+  } else {
 
   const items = Array.from(document.querySelectorAll('.masonry-item img'));
   let current = 0;
@@ -92,6 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowLeft')  prevLB();
     if (e.key === 'ArrowRight') nextLB();
   });
+
+  } /* end lightbox block */
 
   /* ── Contact form submit → Netlify Function ─────────────── */
   const contactForm = document.getElementById('contact-form');
