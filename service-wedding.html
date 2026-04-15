@@ -102,7 +102,7 @@
 
   <script>
     // Load photos from Netlify CDN manifest (same domain, so works)
-    fetch('https://owen-style.netlify.app/portfolio/manifest.json')
+    fetch('weddings/albums.json')
       .then(r => r.json())
       .then(photos => {
         const gallery = document.getElementById('gallery');
