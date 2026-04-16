@@ -103,8 +103,8 @@
     
     // Load wedding photos data
     Promise.all([
-      fetch('../weddings/albums.json').then(r => r.json()),
-      fetch('../weddings/wedding-photos.json').then(r => r.json())
+      fetch('/owen-style-web/weddings/albums.json').then(r => r.json()),
+      fetch('/owen-style-web/weddings/wedding-photos.json').then(r => r.json())
     ])
     .then(([albums, photoData]) => {
       const album = albums.find(a => a.html === htmlFile);
