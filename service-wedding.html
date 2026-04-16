@@ -7,7 +7,6 @@
   <title>婚禮紀錄 — Owen Style 婚禮婚紗攝影</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* Wedding Album Cards */
     .albums-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -64,9 +63,7 @@
       padding: 80px 20px;
       color: var(--text-light);
     }
-    .error {
-      color: #c44;
-    }
+    .error { color: #c44; }
   </style>
 </head>
 <body>
@@ -166,16 +163,15 @@
         container.innerHTML = albums.map(album => {
           const title = album.title || '婚禮作品';
           const count = album.count || 0;
-          // Use SmugMug URL if available, otherwise fall back to local HTML
-          const linkUrl = album.smugmug_url || `weddings/${album.html || '#'}`;
-          const isExternal = linkUrl.startsWith('http');
+          const htmlFile = album.html || '#';
+          const hasPhotos = album.smugmug_key ? true : false;
           
           return `
-            <a href="${linkUrl}" class="album-card" ${isExternal ? 'target="_blank" rel="noopener"' : ''}>
+            <a href="weddings/${htmlFile}" class="album-card">
               <div class="album-cover">💍</div>
               <div class="album-info">
                 <h3 class="album-title">${title}</h3>
-                <p class="album-meta">${isExternal ? '在 SmugMug 查看完整婚禮照片 →' : '點擊查看完整婚禮故事'}</p>
+                <p class="album-meta">${hasPhotos ? '點擊查看完整婚禮故事' : '照片整理中'}</p>
                 ${count > 0 ? `<span class="album-count">${count} 張照片</span>` : ''}
               </div>
             </a>
