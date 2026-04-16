@@ -166,14 +166,16 @@
         container.innerHTML = albums.map(album => {
           const title = album.title || '婚禮作品';
           const count = album.count || 0;
-          const htmlFile = album.html || '#';
+          // Use SmugMug URL if available, otherwise fall back to local HTML
+          const linkUrl = album.smugmug_url || `weddings/${album.html || '#'}`;
+          const isExternal = linkUrl.startsWith('http');
           
           return `
-            <a href="weddings/${htmlFile}" class="album-card">
+            <a href="${linkUrl}" class="album-card" ${isExternal ? 'target="_blank" rel="noopener"' : ''}>
               <div class="album-cover">💍</div>
               <div class="album-info">
                 <h3 class="album-title">${title}</h3>
-                <p class="album-meta">點擊查看完整婚禮故事</p>
+                <p class="album-meta">${isExternal ? '在 SmugMug 查看完整婚禮照片 →' : '點擊查看完整婚禮故事'}</p>
                 ${count > 0 ? `<span class="album-count">${count} 張照片</span>` : ''}
               </div>
             </a>
