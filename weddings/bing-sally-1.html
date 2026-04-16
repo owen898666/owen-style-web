@@ -7,30 +7,56 @@
   <link rel="stylesheet" href="../css/style.css">
   <style>
     .gallery-container { padding: 40px 0; }
-    .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-    .photo-item { aspect-ratio: 3/2; background: #f5f0e8; border-radius: 8px; overflow: hidden; }
-    .photo-item img { width: 100%; height: 100%; object-fit: cover; }
-    .loading, .error { text-align: center; padding: 80px 20px; }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .photo-item {
+      background: #f5f0e8;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .photo-item:hover { transform: scale(1.02); }
+    .photo-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .loading, .error { text-align: center; padding: 80px 20px; color: var(--text-light); }
     .error { color: #c44; }
-    .back-link { display: inline-block; margin-bottom: 20px; color: var(--accent); }
+    .back-link { display: inline-block; margin-bottom: 20px; color: var(--accent); text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
-  <nav class="nav"><a href="../index.html" class="nav-logo">OWEN</a></nav>
+  <nav class="nav">
+    <a href="../index.html" class="nav-logo">OWEN <span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="../about.html">關於</a></li>
+      <li><a href="../services.html">服務項目</a></li>
+      <li><a href="../portfolio.html" class="active">作品集</a></li>
+      <li><a href="../process.html">拍攝流程</a></li>
+      <li><a href="../contact.html" class="nav-cta">預約諮詢</a></li>
+    </ul>
+  </nav>
+
   <div class="container gallery-container">
-    <a href="../service-wedding.html" class="back-link">← 返回</a>
-    <h1 id="album-title">載入中...</h1>
-    <p id="album-meta"></p>
+    <a href="../service-wedding.html" class="back-link">← 返回婚禮作品集</a>
+    <div class="gallery-header">
+      <h1 id="album-title">載入中...</h1>
+      <p id="album-meta"></p>
+    </div>
     <div id="photo-grid"><div class="loading">載入中...</div></div>
   </div>
+
   <script>
     var htmlFile = window.location.pathname.split('/').pop();
-    var debug = document.getElementById('album-meta');
-    debug.textContent = '載入: ' + htmlFile;
     
     fetch('/owen-style-web/weddings/wedding-photos.json')
       .then(function(r) { 
-        debug.textContent += ' | HTTP ' + r.status;
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json(); 
       })
@@ -40,16 +66,18 @@
           document.getElementById('photo-grid').innerHTML = '<div class="error">找不到相簿</div>';
           return;
         }
-        document.getElementById('album-title').textContent = album.title || '婚禮';
+        document.getElementById('album-title').textContent = album.title || '婚禮作品';
         var photos = album.photos || [];
         document.getElementById('album-meta').textContent = photos.length + ' 張照片';
         
         var html = '';
         for (var i = 0; i < photos.length; i++) {
           var p = photos[i];
-          var src = p.thumb || p.medium || '';
+          // Prefer large, then medium, then thumb
+          var src = p.large || p.medium || p.thumb || '';
+          var alt = album.title || '婚禮照片';
           if (src) {
-            html += '<div class="photo-item"><img src="' + src + '" alt="" loading="lazy"></div>';
+            html += '<div class="photo-item"><img src="' + src + '" alt="' + alt + '" loading="lazy"></div>';
           }
         }
         document.getElementById('photo-grid').innerHTML = html || '<div class="error">無照片</div>';
