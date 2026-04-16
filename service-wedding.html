@@ -6,6 +6,68 @@
   <meta name="description" content="Owen Style 婚禮紀錄作品 — 完整婚禮當天拍攝，以報導式手法記錄真實情感。">
   <title>婚禮紀錄 — Owen Style 婚禮婚紗攝影</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Wedding Album Cards */
+    .albums-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      padding: 40px 0;
+    }
+    .album-card {
+      background: var(--white);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .album-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    .album-cover {
+      aspect-ratio: 3/2;
+      background: linear-gradient(135deg, #f5f0e8 0%, #e8e0d5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--accent);
+    }
+    .album-info {
+      padding: 20px;
+    }
+    .album-title {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .album-meta {
+      font-size: 0.875rem;
+      color: var(--text-light);
+    }
+    .album-count {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      margin-top: 12px;
+    }
+    .loading, .error {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-light);
+    }
+    .error {
+      color: #c44;
+    }
+  </style>
 </head>
 <body>
 
@@ -22,7 +84,6 @@
   </nav>
 
   <div class="page-header">
-    <img class="page-header-bg" src="https://owen-style.netlify.app/owen-574.jpg" alt="婚禮紀錄">
     <div class="page-header-overlay"></div>
     <div class="page-header-content">
       <p class="breadcrumb">
@@ -33,15 +94,13 @@
         <span>婚禮紀錄</span>
       </p>
       <h1>婚禮紀錄</h1>
-      <p>Wedding Photography · 155 組作品</p>
+      <p>Wedding Photography · 完整婚禮故事</p>
     </div>
   </div>
 
-  <div class="masonry-wrap">
-    <div class="container">
-      <div class="masonry" id="gallery">
-        <!-- Photos will be injected by JS from manifest -->
-      </div>
+  <div class="container">
+    <div id="albums-container" class="albums-grid">
+      <div class="loading">作品載入中...</div>
     </div>
   </div>
 
@@ -79,7 +138,7 @@
           <li><a href="service-wedding.html">婚禮紀錄</a></li>
           <li><a href="service-registration.html">結婚登記</a></li>
           <li><a href="service-maternity.html">孕寫真</a></li>
-          <li><a href="service-family.html">家庭寫真</li>
+          <li><a href="service-family.html">家庭寫真</a></li>
           <li><a href="service-baby.html">抓週紀錄</a></li>
         </ul>
       </div>
@@ -90,79 +149,41 @@
     </div>
   </footer>
 
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox">
-    <div class="lightbox-backdrop" id="lb-backdrop"></div>
-    <img class="lightbox-img-wrap" id="lb-img" src="" alt="">
-    <button class="lightbox-close" id="lb-close" aria-label="關閉">×</button>
-    <button class="lightbox-nav lightbox-prev" id="lb-prev" aria-label="上一張">‹</button>
-    <button class="lightbox-nav lightbox-next" id="lb-next" aria-label="下一張">›</button>
-    <span class="lightbox-counter" id="lb-counter"></span>
-  </div>
-
   <script>
-    // Load photos from Netlify CDN manifest (same domain, so works)
+    // Load wedding albums from local albums.json
     fetch('weddings/albums.json')
-      .then(r => r.json())
-      .then(photos => {
-        const gallery = document.getElementById('gallery');
-        photos.forEach((p, i) => {
-          const div = document.createElement('div');
-          div.className = 'masonry-item ' + ((p.orientation === 'portrait') ? 'portrait' : 'landscape');
-          const img = document.createElement('img');
-          img.src = '/images/weddings/' + p.slug + '.jpg';
-          img.alt = p.title || '婚禮作品';
-          img.loading = 'lazy';
-          div.appendChild(img);
-          gallery.appendChild(div);
-        });
-        // Re-init lightbox after DOM update
-        initLightbox();
+      .then(r => {
+        if (!r.ok) throw new Error('無法載入作品清單');
+        return r.json();
       })
-      .catch(() => {
-        document.getElementById('gallery').innerHTML =
-          '<p style="text-align:center;color:var(--text-light);padding:60px 0;">作品載入中，請稍候...</p>';
+      .then(albums => {
+        const container = document.getElementById('albums-container');
+        if (!albums || albums.length === 0) {
+          container.innerHTML = '<div class="error">暫無作品</div>';
+          return;
+        }
+        
+        container.innerHTML = albums.map(album => {
+          const title = album.title || '婚禮作品';
+          const count = album.count || 0;
+          const htmlFile = album.html || '#';
+          
+          return `
+            <a href="weddings/${htmlFile}" class="album-card">
+              <div class="album-cover">💍</div>
+              <div class="album-info">
+                <h3 class="album-title">${title}</h3>
+                <p class="album-meta">點擊查看完整婚禮故事</p>
+                ${count > 0 ? `<span class="album-count">${count} 張照片</span>` : ''}
+              </div>
+            </a>
+          `;
+        }).join('');
+      })
+      .catch(err => {
+        document.getElementById('albums-container').innerHTML = 
+          `<div class="error">載入失敗：${err.message}<br>請稍後再試</div>`;
       });
-
-    function initLightbox() {
-      const lightbox = document.getElementById('lightbox');
-      const lbImg = document.getElementById('lb-img');
-      const lbCounter = document.getElementById('lb-counter');
-      const lbClose = document.getElementById('lb-close');
-      const lbPrev = document.getElementById('lb-prev');
-      const lbNext = document.getElementById('lb-next');
-      const lbBackdrop = document.getElementById('lb-backdrop');
-      const items = Array.from(document.querySelectorAll('.masonry-item img'));
-      let current = 0;
-
-      function openLB(index) {
-        current = Math.max(0, Math.min(index, items.length - 1));
-        lbImg.src = items[current].src;
-        lbImg.alt = items[current].alt;
-        lbCounter.textContent = (current + 1) + ' / ' + items.length;
-        lightbox.classList.add('open');
-        document.body.style.overflow = 'hidden';
-      }
-      function closeLB() {
-        lightbox.classList.remove('open');
-        document.body.style.overflow = '';
-      }
-
-      items.forEach((img, i) => {
-        img.parentElement.style.cursor = 'zoom-in';
-        img.parentElement.addEventListener('click', () => openLB(i));
-      });
-      lbClose.addEventListener('click', closeLB);
-      lbBackdrop.addEventListener('click', closeLB);
-      lbPrev.addEventListener('click', () => openLB(current - 1));
-      lbNext.addEventListener('click', () => openLB(current + 1));
-      document.addEventListener('keydown', e => {
-        if (!lightbox.classList.contains('open')) return;
-        if (e.key === 'Escape') closeLB();
-        if (e.key === 'ArrowLeft') openLB(current - 1);
-        if (e.key === 'ArrowRight') openLB(current + 1);
-      });
-    }
   </script>
   <script src="js/main.js"></script>
 </body>
