@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>婚禮作品 — Owen Style 婚禮婚紗攝影</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .gallery-container { padding: 40px 0; }
+    .gallery-header { text-align: center; margin-bottom: 40px; }
+    .gallery-header h1 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 10px; }
+    .gallery-header p { color: var(--text-light); }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .photo-item {
+      aspect-ratio: 3/2;
+      background: #f5f0e8;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: zoom-in;
+      position: relative;
+    }
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .photo-item:hover img { transform: scale(1.02); }
+    .loading, .error {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-light);
+    }
+    .error { color: #c44; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent);
+      text-decoration: none;
+      margin-bottom: 20px;
+    }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav scrolled">
+    <a href="../index.html" class="nav-logo">OWEN <span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="../about.html">關於</a></li>
+      <li><a href="../services.html">服務項目</a></li>
+      <li><a href="../portfolio.html" class="active">作品集</a></li>
+      <li><a href="../process.html">拍攝流程</a></li>
+      <li><a href="../contact.html" class="nav-cta">預約諮詢</a></li>
+    </ul>
+  </nav>
+
+  <div class="container gallery-container">
+    <a href="../service-wedding.html" class="back-link">← 返回婚禮作品集</a>
+    
+    <div class="gallery-header">
+      <h1 id="album-title">載入中...</h1>
+      <p id="album-meta"></p>
+    </div>
+    
+    <div id="photo-grid" class="photo-grid">
+      <div class="loading">照片載入中...</div>
+    </div>
+  </div>
+
+  <script>
+    // Debug: log what's happening
+    console.log('Wedding page starting...');
+    
+    // Get current HTML filename - handle different URL formats
+    let htmlFile = window.location.pathname.split('/').pop();
+    // Remove .html if present
+    if (htmlFile.endsWith('.html')) {
+      htmlFile = htmlFile.replace('.html', '');
+    }
+    // Try both with and without .html
+    const keysToTry = [htmlFile + '.html', htmlFile, htmlFile.replace(/-/g, '')];
+    
+    console.log('Looking for keys:', keysToTry);
+    
+    // SIMPLIFIED: Just load wedding-photos.json (no albums.json needed)
+    fetch('./wedding-photos.json')
+      .then(r => {
+        console.log('Response status:', r.status);
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(photoData => {
+        console.log('Loaded wedding-photos.json, keys:', Object.keys(photoData).length);
+        
+        // Try to find this album
+        let albumData = null;
+        let foundKey = null;
+        
+        for (const key of keysToTry) {
+          if (photoData[key]) {
+            albumData = photoData[key];
+            foundKey = key;
+            console.log('Found album with key:', key);
+            break;
+          }
+        }
+        
+        if (!albumData) {
+          console.log('Album not found in wedding-photos.json');
+          document.getElementById('photo-grid').innerHTML = '<div class="error">找不到相簿資料</div>';
+          return;
+        }
+        
+        const title = albumData.title || '婚禮作品';
+        const photos = albumData.photos || [];
+        
+        document.getElementById('album-title').textContent = title;
+        document.getElementById('album-meta').textContent = photos.length + ' 張照片';
+        
+        if (photos.length === 0) {
+          document.getElementById('photo-grid').innerHTML = '<div class="error">此相簿暫無照片</div>';
+          return;
+        }
+        
+        // Render photos
+        const grid = document.getElementById('photo-grid');
+        grid.innerHTML = photos.map((p, i) => {
+          const thumb = p.thumb || p.ThumbUrl || '';
+          const large = p.large || p.DisplayUrl || p.url || '';
+          if (!thumb) return '';
+          return '<div class="photo-item" onclick="window.open(\'' + large + '\', \'_blank\')"><img src="' + thumb + '" alt="婚禮照片" loading="lazy"></div>';
+        }).join('');
+        
+        console.log('Rendered', photos.length, 'photos');
+      })
+      .catch(err => {
+        console.error('Error loading photos:', err);
+        document.getElementById('photo-grid').innerHTML = '<div class="error">載入失敗: ' + err.message + '</div>';
+      });
+  </script>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      <span>© 2026 Owen Style Photography</span>
+    </div>
+  </footer>
+
+</body>
+</html>
