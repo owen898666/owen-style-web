@@ -42,7 +42,6 @@
       <li><a href="../contact.html" class="nav-cta">預約諮詢</a></li>
     </ul>
   </nav>
-
   <div class="container gallery-container">
     <a href="../service-wedding.html" class="back-link">← 返回婚禮作品集</a>
     <div class="gallery-header">
@@ -51,40 +50,26 @@
     </div>
     <div id="photo-grid"><div class="loading">載入中...</div></div>
   </div>
-
   <script>
     var htmlFile = window.location.pathname.split('/').pop();
-    
     fetch('/owen-style-web/weddings/wedding-photos.json')
-      .then(function(r) { 
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.json(); 
-      })
+      .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(function(data) {
         var album = data[htmlFile];
-        if (!album) {
-          document.getElementById('photo-grid').innerHTML = '<div class="error">找不到相簿</div>';
-          return;
-        }
+        if (!album) { document.getElementById('photo-grid').innerHTML = '<div class="error">找不到相簿</div>'; return; }
         document.getElementById('album-title').textContent = album.title || '婚禮作品';
         var photos = album.photos || [];
         document.getElementById('album-meta').textContent = photos.length + ' 張照片';
-        
         var html = '';
         for (var i = 0; i < photos.length; i++) {
           var p = photos[i];
-          // Prefer large, then medium, then thumb
           var src = p.large || p.medium || p.thumb || '';
           var alt = album.title || '婚禮照片';
-          if (src) {
-            html += '<div class="photo-item"><img src="' + src + '" alt="' + alt + '" loading="lazy"></div>';
-          }
+          if (src) { html += '<div class="photo-item"><img src="' + src + '" alt="' + alt + '" loading="lazy"></div>'; }
         }
         document.getElementById('photo-grid').innerHTML = html || '<div class="error">無照片</div>';
       })
-      .catch(function(err) {
-        document.getElementById('photo-grid').innerHTML = '<div class="error">載入失敗: ' + err.message + '</div>';
-      });
+      .catch(function(err) { document.getElementById('photo-grid').innerHTML = '<div class="error">載入失敗: ' + err.message + '</div>'; });
   </script>
 </body>
 </html>
