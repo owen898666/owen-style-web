@@ -97,14 +97,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   } /* end lightbox block */
 
-  /* ── Contact form submit → Formspree ────────────────────── */
+  /* ── Contact form → Formspree (native submission) ───────── */
   const contactForm = document.getElementById('contact-form');
   if (contactForm) {
-    contactForm.addEventListener('submit', async e => {
-      // Don't prevent default - let Formspree handle the submission
+    contactForm.addEventListener('submit', function(e) {
       const btn = contactForm.querySelector('button[type="submit"]');
-      const originalText = btn.textContent;
-
+      
       // Basic validation
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
@@ -117,15 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      // Show loading state
       btn.disabled = true;
       btn.textContent = '傳送中…';
-
+      
       // Form will submit to Formspree normally
-      // Show success message after a brief delay
-      setTimeout(() => {
-        btn.textContent = '已送出 ✦';
-        btn.style.background = 'var(--accent)';
-      }, 500);
+      // Page will redirect to Formspree thank you page
     });
   }
 });
