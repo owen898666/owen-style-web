@@ -51,7 +51,15 @@
     <div id="photo-grid"><div class="loading">載入中...</div></div>
   </div>
   <script>
-    var htmlFile = window.location.pathname.split('/').pop();
+    // Get filename from URL, handling both /file.html and /file.html/ cases
+    var path = window.location.pathname;
+    var htmlFile = path.split('/').pop();
+    if (!htmlFile || htmlFile === '') {
+        // URL ends with /, get the second to last segment
+        var parts = path.split('/').filter(function(p) { return p; });
+        htmlFile = parts[parts.length - 1] || 'index.html';
+    }
+    console.log('Loading album:', htmlFile);
     fetch('wedding-photos.json')
       .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(function(data) {
