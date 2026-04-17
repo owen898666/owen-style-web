@@ -99,7 +99,8 @@
 
         <!-- Right: Form -->
         <div>
-          <form id="contact-form" class="reveal" action="https://formspree.io/f/xnqevwdr" method="POST">
+          <form id="contact-form" class="reveal" action="https://formspree.io/f/xnqevwdr" method="POST" onsubmit="return handleFormSubmit(event)">
+            <div id="form-error" style="display:none; color: #c44; background: #fee; padding: 10px; border-radius: 4px; margin-bottom: 15px;"></div>
             <div class="form-row">
               <div class="form-group">
                 <label for="name">姓名 *</label>
@@ -186,5 +187,17 @@
   </footer>
 
   <script src="js/main.js"></script>
+<script>
+function handleFormSubmit(e) {
+    // Show loading state
+    const btn = document.querySelector('#contact-form button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = '傳送中...';
+    
+    // Let the form submit normally to Formspree
+    // If it fails, the page will redirect to Formspree error page
+    return true;
+}
+</script>
 </body>
 </html>
