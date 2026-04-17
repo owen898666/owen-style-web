@@ -97,27 +97,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   } /* end lightbox block */
 
-  /* ── Contact form submit → Netlify Function ─────────────── */
+  /* ── Contact form submit → Formspree ────────────────────── */
   const contactForm = document.getElementById('contact-form');
   if (contactForm) {
     contactForm.addEventListener('submit', async e => {
-      e.preventDefault();
+      // Don't prevent default - let Formspree handle the submission
       const btn = contactForm.querySelector('button[type="submit"]');
       const originalText = btn.textContent;
 
-      // Gather form data
-      const formData = {
-        name:    document.getElementById('name').value.trim(),
-        email:   document.getElementById('email').value.trim(),
-        phone:   document.getElementById('phone').value.trim(),
-        service: document.getElementById('service').value,
-        date:    document.getElementById('date').value,
-        where:   document.getElementById('where').value.trim(),
-        message: document.getElementById('message').value.trim()
-      };
-
       // Basic validation
-      if (!formData.name || !formData.email || !formData.service || !formData.message) {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const service = document.getElementById('service').value;
+      const message = document.getElementById('message').value.trim();
+
+      if (!name || !email || !service || !message) {
+        e.preventDefault();
         alert('請填寫必填欄位（姓名、Email、服務項目、訊息）');
         return;
       }
@@ -125,36 +120,12 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.disabled = true;
       btn.textContent = '傳送中…';
 
-      try {
-        const res = await fetch('/.netlify/functions/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
-        });
-        const data = await res.json();
-
-        if (res.ok && data.success) {
-          btn.textContent = '已送出 ✦';
-          btn.style.background = 'var(--accent)';
-          contactForm.reset();
-          setTimeout(() => {
-            btn.textContent = originalText;
-            btn.style.background = '';
-            btn.disabled = false;
-          }, 5000);
-        } else {
-          throw new Error(data.error || '寄送失敗');
-        }
-      } catch (err) {
-        btn.textContent = '請再試一次 ✦';
-        btn.style.background = '#c0392b';
-        setTimeout(() => {
-          btn.textContent = originalText;
-          btn.style.background = '';
-          btn.disabled = false;
-        }, 3000);
-        console.error('Form submit error:', err);
-      }
+      // Form will submit to Formspree normally
+      // Show success message after a brief delay
+      setTimeout(() => {
+        btn.textContent = '已送出 ✦';
+        btn.style.background = 'var(--accent)';
+      }, 500);
     });
   }
 });
