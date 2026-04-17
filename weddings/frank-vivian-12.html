@@ -52,7 +52,7 @@
   </div>
   <script>
     var htmlFile = window.location.pathname.split('/').pop();
-    fetch('/owen-style-web/weddings/wedding-photos.json')
+    fetch('wedding-photos.json')
       .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(function(data) {
         var album = data[htmlFile];
