@@ -97,12 +97,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   } /* end lightbox block */
 
-  /* ── Contact form → Formspree (native submission) ───────── */
+  /* ── Contact form → Google Apps Script ────────────────────── */
   const contactForm = document.getElementById('contact-form');
   if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-      const btn = contactForm.querySelector('button[type="submit"]');
+    contactForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
       
+      const btn = contactForm.querySelector('button[type="submit"]');
+      const originalText = btn.textContent;
+
       // Basic validation
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
@@ -110,17 +113,43 @@ document.addEventListener('DOMContentLoaded', () => {
       const message = document.getElementById('message').value.trim();
 
       if (!name || !email || !service || !message) {
-        e.preventDefault();
         alert('請填寫必填欄位（姓名、Email、服務項目、訊息）');
         return;
       }
 
-      // Show loading state
       btn.disabled = true;
       btn.textContent = '傳送中…';
       
-      // Form will submit to Formspree normally
-      // Page will redirect to Formspree thank you page
+      try {
+        const formData = new FormData(contactForm);
+        await fetch(contactForm.action, {
+          method: 'POST',
+          body: formData,
+          mode: 'no-cors'
+        });
+        
+        // Always treat as success (no-cors can't read response)
+        btn.textContent = '已送出 ✦';
+        btn.style.background = '#2d8f4e';
+        btn.style.color = '#fff';
+        contactForm.reset();
+        alert('我們收到您的詢問單，會在24小時內回覆！');
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = '';
+          btn.style.color = '';
+          btn.disabled = false;
+        }, 3000);
+      } catch (err) {
+        btn.textContent = '請再試一次';
+        btn.style.background = '#c0392b';
+        alert('送出失敗，請直接 Email 至 owen898666@gmail.com');
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = '';
+          btn.disabled = false;
+        }, 3000);
+      }
     });
   }
 });
