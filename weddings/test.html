@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test Wedding Album</title>
+</head>
+<body>
+    <h1>Test: bing-sally-1.html</h1>
+    <div id="debug"></div>
+    <div id="photo-grid">Loading...</div>
+    
+    <script>
+        var debug = document.getElementById('debug');
+        
+        // Get filename from URL
+        var path = window.location.pathname;
+        var htmlFile = path.split('/').pop();
+        if (!htmlFile || htmlFile === '') {
+            var parts = path.split('/').filter(function(p) { return p; });
+            htmlFile = parts[parts.length - 1] || 'index.html';
+        }
+        
+        debug.innerHTML = '<p>Path: ' + path + '</p>' +
+                          '<p>Filename: ' + htmlFile + '</p>';
+        
+        // Try to fetch the JSON
+        fetch('wedding-photos.json')
+            .then(function(r) { 
+                debug.innerHTML += '<p>Response status: ' + r.status + '</p>';
+                if (!r.ok) throw new Error('HTTP ' + r.status); 
+                return r.json(); 
+            })
+            .then(function(data) {
+                debug.innerHTML += '<p>JSON loaded, keys: ' + Object.keys(data).slice(0,5).join(', ') + '</p>';
+                var album = data[htmlFile];
+                if (!album) {
+                    debug.innerHTML += '<p style="color:red">Album not found for: ' + htmlFile + '</p>';
+                    document.getElementById('photo-grid').innerHTML = 'Album not found';
+                    return;
+                }
+                debug.innerHTML += '<p>Album title: ' + album.title + '</p>';
+                debug.innerHTML += '<p>Photos count: ' + (album.photos ? album.photos.length : 0) + '</p>';
+                document.getElementById('photo-grid').innerHTML = 'Loaded successfully!';
+            })
+            .catch(function(err) {
+                debug.innerHTML += '<p style="color:red">Error: ' + err.message + '</p>';
+                document.getElementById('photo-grid').innerHTML = 'Error: ' + err.message;
+            });
+    </script>
+</body>
+</html>
