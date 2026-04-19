@@ -3,190 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>婚禮作品 — Owen Style 婚禮婚紗攝影</title>
-  <link rel="stylesheet" href="../css/style.css">
-  <style>
-    .gallery-container { padding-top: 100px; padding-bottom: 40px; }
-    .gallery-header { text-align: center; margin-bottom: 40px; }
-    .gallery-header h1 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 10px; }
-    .gallery-header p { color: var(--text-light); }
-    .photo-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .photo-item {
-      aspect-ratio: 3/2;
-      background: #f5f0e8;
-      border-radius: 8px;
-      overflow: hidden;
-      cursor: zoom-in;
-    }
-    .photo-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s;
-    }
-    .photo-item:hover img { transform: scale(1.02); }
-    .loading, .error {
-      text-align: center;
-      padding: 80px 20px;
-      color: var(--text-light);
-    }
-    .error { color: #c44; }
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--accent);
-      text-decoration: none;
-      margin-bottom: 20px;
-    }
-    .back-link:hover { text-decoration: underline; }
-    .smugmug-link {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 12px 24px;
-      background: var(--accent);
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-    }
-  </style>
+  <meta name="description" content="Bing & Sally 頤品大飯店 — Owen Style 婚禮紀錄作品。">
+  <title>Bing & Sally 頤品大飯店 — Owen Style 婚禮婚紗攝影</title>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+
   <nav class="nav scrolled">
-    <a href="../index.html" class="nav-logo">OWEN <span>.</span></a>
+    <a href="/index.html" class="nav-logo">OWEN <span>.</span></a>
     <ul class="nav-links">
-      <li><a href="../about.html">關於</a></li>
-      <li><a href="../services.html">服務項目</a></li>
-      <li><a href="../portfolio.html" class="active">作品集</a></li>
-      <li><a href="../process.html">拍攝流程</a></li>
-      <li><a href="../contact.html" class="nav-cta">預約諮詢</a></li>
+      <li><a href="/about.html">關於</a></li>
+      <li><a href="/services.html">服務項目</a></li>
+      <li><a href="/portfolio.html" class="active">作品集</a></li>
+      <li><a href="/process.html">拍攝流程</a></li>
+      <li><a href="/contact.html" class="nav-cta">預約諮詢</a></li>
     </ul>
     <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
   </nav>
 
-  <div class="container gallery-container">
-    <a href="../service-wedding.html" class="back-link">← 返回婚禮作品集</a>
-    
-    <div class="gallery-header">
-      <h1 id="album-title">載入中...</h1>
-      <p id="album-meta"></p>
-    </div>
-    
-    <div id="photo-grid" class="photo-grid">
-      <div class="loading">照片載入中...</div>
-    </div>
-    
-    <div id="smugmug-section" style="text-align: center; margin-top: 40px; display: none;">
-      <a id="smugmug-link" href="#" target="_blank" class="smugmug-link">在 SmugMug 查看完整相簿 →</a>
+  <div class="page-header" style="min-height: 60vh;">
+    <img class="page-header-bg" src="/images/weddings/bing-and-sally-頤品大飯店.jpg" alt="Bing & Sally 頤品大飯店">
+    <div class="page-header-overlay"></div>
+    <div class="page-header-content">
+      <p class="breadcrumb">
+        <a href="/index.html">首頁</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="/weddings/">婚禮紀錄</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Bing & Sally 頤品大飯店</span>
+      </p>
+      <h1>Bing & Sally 頤品大飯店</h1>
+      <p>127 張作品</p>
     </div>
   </div>
 
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000;">
-    <img id="lb-img" src="" alt="" style="max-width: 90%; max-height: 90%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); object-fit: contain;">
-    <button id="lb-close" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: white; font-size: 2rem; cursor: pointer;">×</button>
-    <button id="lb-prev" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; color: white; font-size: 2rem; padding: 10px 20px; cursor: pointer; border-radius: 4px;">‹</button>
-    <button id="lb-next" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; color: white; font-size: 2rem; padding: 10px 20px; cursor: pointer; border-radius: 4px;">›</button>
-    <span id="lb-counter" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: white; font-size: 0.875rem;"></span>
-  </div>
+  <section class="section-py">
+    <div class="container">
+      <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+        <img src="/images/weddings/bing-and-sally-頤品大飯店.jpg" alt="Bing & Sally 頤品大飯店" style="width: 100%; border-radius: 4px; box-shadow: 0 8px 40px rgba(0,0,0,0.12);">
+        <p style="margin-top: 32px; font-size: 1.1rem; color: var(--text-light);">
+          這是 Bing & Sally 頤品大飯店 的婚禮紀錄作品。<br>
+          完整相簿即將上線，敬請期待。
+        </p>
+        <a href="/weddings/" class="btn btn-outline-dark" style="margin-top: 24px;">← 瀏覽其他婚禮作品</a>
+      </div>
+    </div>
+  </section>
 
-  <script src="../js/main.js"></script>
-  <script>
-    // Get current HTML filename
-    const htmlFile = window.location.pathname.split('/').pop();
-    let photos = [];
-    let currentIndex = 0;
-    
-    // Load wedding photos data
-    Promise.all([
-      fetch('../weddings/albums.json').then(r => r.json()),
-      fetch('../weddings/wedding-photos.json').then(r => r.json())
-    ])
-    .then(([albums, photoData]) => {
-      const album = albums.find(a => a.html === htmlFile);
-      
-      if (!album) {
-        document.getElementById('photo-grid').innerHTML = '<div class="error">找不到相簿資訊</div>';
-        return;
-      }
-      
-      document.getElementById('album-title').textContent = album.title || '婚禮作品';
-      
-      const photoAlbum = photoData[htmlFile];
-      if (photoAlbum && photoAlbum.photos && photoAlbum.photos.length > 0) {
-        photos = photoAlbum.photos;
-        document.getElementById('album-meta').textContent = `${photos.length} 張照片`;
-        
-        // Render photos
-        const grid = document.getElementById('photo-grid');
-        grid.innerHTML = photos.map((p, i) => `
-          <div class="photo-item" onclick="openLightbox(${i})">
-            <img src="${p.thumb || p.medium}" alt="" loading="lazy">
-          </div>
-        `).join('');
-        
-        // Show SmugMug link if available
-        if (album.smugmug_url) {
-          document.getElementById('smugmug-section').style.display = 'block';
-          document.getElementById('smugmug-link').href = album.smugmug_url;
-        }
-      } else {
-        document.getElementById('photo-grid').innerHTML = '<div class="error">此相簿暫無照片</div>';
-      }
-    })
-    .catch(err => {
-      document.getElementById('photo-grid').innerHTML = `<div class="error">載入失敗：${err.message}</div>`;
-    });
-    
-    // Lightbox functions
-    function openLightbox(index) {
-      currentIndex = index;
-      updateLightbox();
-      document.getElementById('lightbox').style.display = 'block';
-      document.body.style.overflow = 'hidden';
-    }
-    
-    function closeLightbox() {
-      document.getElementById('lightbox').style.display = 'none';
-      document.body.style.overflow = '';
-    }
-    
-    function updateLightbox() {
-      const img = document.getElementById('lb-img');
-      const counter = document.getElementById('lb-counter');
-      if (photos[currentIndex]) {
-        img.src = photos[currentIndex].large || photos[currentIndex].medium;
-        counter.textContent = `${currentIndex + 1} / ${photos.length}`;
-      }
-    }
-    
-    function nextPhoto() {
-      currentIndex = (currentIndex + 1) % photos.length;
-      updateLightbox();
-    }
-    
-    function prevPhoto() {
-      currentIndex = (currentIndex - 1 + photos.length) % photos.length;
-      updateLightbox();
-    }
-    
-    // Event listeners
-    document.getElementById('lb-close').onclick = closeLightbox;
-    document.getElementById('lb-backdrop')?.onclick = closeLightbox;
-    document.getElementById('lb-next').onclick = nextPhoto;
-    document.getElementById('lb-prev').onclick = prevPhoto;
-    
-    document.addEventListener('keydown', (e) => {
-      if (document.getElementById('lightbox').style.display === 'block') {
-        if (e.key === 'Escape') closeLightbox();
-        if (e.key === 'ArrowRight') nextPhoto();
-        if (e.key === 'ArrowLeft') prevPhoto();
-      }
-    });
-  </script>
+  <section class="cta-section">
+    <div class="container">
+      <p class="section-label reveal">Like What You See?</p>
+      <h2 class="reveal">想要 Owen 為你記錄婚禮？</h2>
+      <p class="reveal">檔期有限，歡迎提前預約</p>
+      <div class="reveal"><a href="/contact.html" class="btn btn-primary">預約婚禮攝影</a></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="/index.html" class="nav-logo">OWEN <span style="color:var(--accent);">.</span></a>
+        <p>婚禮婚紗攝影 | 孕寫真 | 家庭寫真</p>
+      </div>
+      <div><h4>快速連結</h4><ul class="footer-links">
+        <li><a href="/about.html">關於 Owen</a></li><li><a href="/services.html">服務項目</a></li>
+        <li><a href="/portfolio.html">作品集</a></li><li><a href="/contact.html">預約諮詢</a></li>
+      </ul></div>
+      <div><h4>服務項目</h4><ul class="footer-links">
+        <li><a href="/service-wedding.html">婚禮紀錄</a></li>
+        <li><a href="/service-registration.html">結婚登記</a></li>
+        <li><a href="/service-maternity.html">孕寫真</a></li>
+        <li><a href="/service-family.html">家庭寫真</a></li>
+        <li><a href="/service-baby.html">抓週紀錄</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Owen Style Photography</span><span>Made with light &amp; love</span></div>
+  </footer>
+
+  <script src="/js/main.js"></script>
 </body>
 </html>

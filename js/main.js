@@ -97,6 +97,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
   } /* end lightbox block */
 
+  /* ── Featured Carousel ────────────────────────────────────── */
+  const track = document.getElementById('carouselTrack');
+  const dotsContainer = document.getElementById('carouselDots');
+  const prevBtn = document.getElementById('carouselPrev');
+  const nextBtn = document.getElementById('carouselNext');
+
+  if (track) {
+    const slides = Array.from(track.querySelectorAll('.carousel-slide'));
+    let current = 0;
+    let timer = null;
+
+    // Build dots
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', `跳到第 ${i + 1} 張`);
+      dot.addEventListener('click', () => goTo(i));
+      dotsContainer.appendChild(dot);
+    });
+    const dots = Array.from(dotsContainer.querySelectorAll('.carousel-dot'));
+
+    function goTo(index) {
+      slides[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (index + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+      resetTimer();
+    }
+
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+
+    function startTimer() {
+      timer = setInterval(next, 4000);
+    }
+    function resetTimer() {
+      clearInterval(timer);
+      startTimer();
+    }
+
+    prevBtn.addEventListener('click', prev);
+    nextBtn.addEventListener('click', next);
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) { diff > 0 ? next() : prev(); }
+    });
+
+    startTimer();
+  }
+
   /* ── Contact form → Google Apps Script ────────────────────── */
   const contactForm = document.getElementById('contact-form');
   if (contactForm) {
